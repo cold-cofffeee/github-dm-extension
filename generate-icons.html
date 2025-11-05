@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Extension Icons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #2ea44f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+    button:hover {
+      background: #2c974b;
+    }
+    .instructions {
+      max-width: 600px;
+      margin: 20px auto;
+      text-align: left;
+      background: #f6f8fa;
+      padding: 20px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>GitHub DM Extension - Icon Generator</h1>
+  
+  <div class="instructions">
+    <h2>Instructions:</h2>
+    <ol>
+      <li>Open this HTML file in your browser</li>
+      <li>Right-click on each canvas below</li>
+      <li>Select "Save image as..."</li>
+      <li>Save as icon16.png, icon48.png, and icon128.png respectively</li>
+      <li>Place the saved files in the "icons" folder</li>
+    </ol>
+  </div>
+
+  <h2>16x16 Icon</h2>
+  <canvas id="icon16" width="16" height="16"></canvas>
+  <button onclick="downloadIcon('icon16', 16)">Download icon16.png</button>
+
+  <h2>48x48 Icon</h2>
+  <canvas id="icon48" width="48" height="48"></canvas>
+  <button onclick="downloadIcon('icon48', 48)">Download icon48.png</button>
+
+  <h2>128x128 Icon</h2>
+  <canvas id="icon128" width="128" height="128"></canvas>
+  <button onclick="downloadIcon('icon128', 128)">Download icon128.png</button>
+
+  <script>
+    // Function to draw icon on canvas
+    function drawIcon(canvasId, size) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+      
+      // Background gradient
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#2ea44f');
+      gradient.addColorStop(1, '#238636');
+      ctx.fillStyle = gradient;
+      
+      // Draw rounded rectangle background
+      const radius = size * 0.2;
+      ctx.beginPath();
+      ctx.moveTo(radius, 0);
+      ctx.lineTo(size - radius, 0);
+      ctx.quadraticCurveTo(size, 0, size, radius);
+      ctx.lineTo(size, size - radius);
+      ctx.quadraticCurveTo(size, size, size - radius, size);
+      ctx.lineTo(radius, size);
+      ctx.quadraticCurveTo(0, size, 0, size - radius);
+      ctx.lineTo(0, radius);
+      ctx.quadraticCurveTo(0, 0, radius, 0);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Draw envelope icon
+      ctx.strokeStyle = 'white';
+      ctx.fillStyle = 'white';
+      ctx.lineWidth = Math.max(1, size / 32);
+      
+      const padding = size * 0.25;
+      const envWidth = size - (padding * 2);
+      const envHeight = envWidth * 0.7;
+      const envX = padding;
+      const envY = (size - envHeight) / 2;
+      
+      // Envelope body
+      ctx.fillRect(envX, envY, envWidth, envHeight);
+      
+      // Envelope flap (triangle)
+      ctx.fillStyle = '#2ea44f';
+      ctx.beginPath();
+      ctx.moveTo(envX, envY);
+      ctx.lineTo(envX + envWidth / 2, envY + envHeight / 2);
+      ctx.lineTo(envX + envWidth, envY);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Envelope outline
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = Math.max(1.5, size / 24);
+      ctx.strokeRect(envX, envY, envWidth, envHeight);
+      
+      // Envelope flap lines
+      ctx.beginPath();
+      ctx.moveTo(envX, envY);
+      ctx.lineTo(envX + envWidth / 2, envY + envHeight / 2);
+      ctx.lineTo(envX + envWidth, envY);
+      ctx.stroke();
+    }
+    
+    // Function to download canvas as PNG
+    function downloadIcon(canvasId, size) {
+      const canvas = document.getElementById(canvasId);
+      const link = document.createElement('a');
+      link.download = `icon${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+    
+    // Draw all icons on page load
+    window.onload = function() {
+      drawIcon('icon16', 16);
+      drawIcon('icon48', 48);
+      drawIcon('icon128', 128);
+    };
+  </script>
+</body>
+</html>

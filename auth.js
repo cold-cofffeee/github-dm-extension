@@ -1,36 +1,13 @@
-const CLIENT_ID = "Ov23livL4oUusWYiKYFP"; // Replace with your GitHub Client ID
-const CLIENT_SECRET = "8c7d730eb89159957442a7a0dce441d5c67f32d0"; // Replace with your GitHub Client Secret
-const REDIRECT_URI = "http://localhost:8080/auth/callback"; // Change in production
+// GitHub DM System - Legacy Auth Module
+// Note: This file is kept for backward compatibility but is no longer actively used
+// The main OAuth flow is now handled by background.js and app.js
 
-async function exchangeCodeForToken(code) {
-  const response = await fetch("https://github.com/login/oauth/access_token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify({
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      code: code
-    })
-  });
+// OAuth configuration is now managed through chrome.storage and environment variables
+// See background.js for the current implementation
 
-  const data = await response.json();
-  return data.access_token;
-}
+console.log('⚠️ Legacy auth.js loaded - This module is deprecated');
+console.log('✅ Please use background.js for OAuth functionality');
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "handle_auth") {
-    const urlParams = new URLSearchParams(message.url.split("?")[1]);
-    const code = urlParams.get("code");
+// Export empty object for compatibility
+export default {};
 
-    if (code) {
-      exchangeCodeForToken(code).then(token => {
-        chrome.storage.sync.set({ github_token: token }, () => {
-          console.log("GitHub token saved!");
-        });
-      });
-    }
-  }
-});
