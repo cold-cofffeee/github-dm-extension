@@ -95,11 +95,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // Handle sending GitHub DM
   if (message.action === "send_dm") {
-    const { username, repository, messageTitle, messageBody, accessToken } = message;
-    console.log(`📤 Sending DM to ${username}/${repository}...`);
+    const { repository, messageTitle, messageBody, accessToken } = message;
+    console.log(`📤 Sending DM to ${repository}...`);
     
     // Send message via GitHub Issues API
-    fetch(`https://api.github.com/repos/${username}/${repository}/issues`, {
+    fetch(`https://api.github.com/repos/${repository}/issues`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -141,7 +141,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       
       // Provide helpful messages for common errors
       if (errorMsg.includes('Not Found') || errorMsg.includes('404')) {
-        errorMsg = `Repository "${username}/${repository}" not found. The recipient must create this repository first with Issues enabled.`;
+        errorMsg = `Repository "${repository}" not found. The recipient must create this repository first with Issues enabled.`;
       } else if (errorMsg.includes('Bad credentials') || errorMsg.includes('401')) {
         errorMsg = 'Invalid or expired access token. Please re-authenticate.';
       } else if (errorMsg.includes('403')) {

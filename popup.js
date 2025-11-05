@@ -351,12 +351,11 @@ function handleSendMessage(e) {
   sendBtn.disabled = true;
   sendBtn.textContent = 'Sending...';
   
-  console.log(`📤 Sending message to ${currentUsername}/${repository}...`);
+  console.log(`📤 Sending message to ${repository}...`);
   
   // Send message
   chrome.runtime.sendMessage({
     action: "send_dm",
-    username: currentUsername,
     repository: repository,
     messageTitle: title,
     messageBody: body,
